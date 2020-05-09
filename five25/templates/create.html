@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  <h2>What are your top 25 career goals?</h2>
+  <form action="/create" method="post">
+    {% for i in range(3) %}
+      <input class="goal" type="text" name="goal{{ i }}">
+    {% endfor %}
+    <input id="submit" type="submit">
+  </form>
+{% endblock %}

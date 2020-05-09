@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  <h1>Goals</h1>
+  <ul>
+    {% for goal in goals %}
+      <li>{{ goal }}</li>
+    {% endfor %}
+  </ul>
+
+  <a href="/add">Create a New Goal</a>
+{% endblock %}

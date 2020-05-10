@@ -7,7 +7,9 @@ topfive = []
 
 @app.route('/')
 def index():
-    return render_template('index.html', goals=goals)
+    print(topfive)
+    print(goals)
+    return render_template('index.html', topfive=topfive, goals=goals)
 
 
 @app.route('/create', methods=['GET', 'POST'])
@@ -21,15 +23,13 @@ def create():
         return render_template('choose.html', goals=goals)
 
 
-@app.route('/choose', methods=['GET', 'POST'])
+@app.route('/choose', methods=['POST'])
 def choose():
-    if request.method == 'GET':
-        return render_template('choose.html', goals=goals)
-    else:
-        topfive = request.form.getlist('goal')
-        for i in topfive:
-            goals.remove(i)
-        return render_template('list.html', topfive=topfive, goals=goals)
+    toplist = request.form.getlist('goal')
+    for i in toplist:
+        topfive.append(i)
+        goals.remove(i)
+    return redirect('/')
 
 
 @app.route('/add', methods=['GET', 'POST'])

@@ -1,12 +1,59 @@
 {% extends "layout.html" %}
 
+{% block js %}
+  <script>
+    let counter = 25;
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // disable submit button
+      document.querySelector('#submit').disabled = true;
+      // enable submit button when text is entered and empty goals remain
+      document.querySelector('#goal').onkeyup = function () {
+        if (document.querySelector('#goal').value.length > 0 && counter > 0)
+          document.querySelector('#submit').disabled = false;
+        else
+          document.querySelector('#submit').disabled = true;
+      };
+      document.querySelector('#new-goal').onsubmit = function() {
+        // create new list item with the value of the input
+        const li = document.createElement('li');
+        li.innerHTML = document.querySelector('#goal').value;
+        // add goal to goal list
+        document.querySelector('#goals').append(li);
+        // clear input field
+        document.querySelector('#goal').value = '';
+        // stop form from submitting
+        return false;
+      };
+    });
+
+    function count() {
+      counter--;
+      document.querySelector('#counter').innerHTML = counter;
+    }
+  </script>
+{% endblock %}
+
 {% block body %}
   <h2>What are your top 25 career goals?</h2>
+  <h3>Let's try this version</h3>
+  <h4>You have <span id="counter">25</span> goals left.
+  <form id="new-goal">
+    <input id="goal" autocomplete="off" autofocus placeholder="New Goal" type="text">
+    <input id="submit" type="submit" onclick="count()">
+  </form>
+  <ul id="goals">
+  </ul>
+
+  <a href="/choose">Click here to proceed</a>
+
+  <hr><hr><hr>
+
   <form action="/create" method="post">
-    {% for i in range(25) %}
+    {% for i in range(10) %}
       <input class="goal" type="text" name="goal{{ i }}"><br>
     {% endfor %}
-    <input id="submit" type="submit">
+    <input type="submit">
   </form>
 
   <a href="/">Home</a>

@@ -3,9 +3,11 @@
 {% block body %}
   <h2>What are your top 25 career goals?</h2>
   <form action="/create" method="post">
-    {% for i in range(3) %}
+    {% for i in range(5) %}
       <input class="goal" type="text" name="goal{{ i }}">
     {% endfor %}
     <input id="submit" type="submit">
   </form>
+
+  <a href="/">Home</a>
 {% endblock %}

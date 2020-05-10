@@ -3,6 +3,7 @@ from flask import Flask, redirect, render_template, request
 app = Flask(__name__)
 
 goals = []
+topfive = []
 
 @app.route('/')
 def index():
@@ -14,10 +15,21 @@ def create():
     if request.method == 'GET':
         return render_template('create.html')
     else:
-        for i in range(3):
+        for i in range(5):
             goal = request.form.get('goal' + str(i))
             goals.append(goal)
-        return redirect('/')
+        return render_template('choose.html', goals=goals)
+
+
+@app.route('/choose', methods=['GET', 'POST'])
+def choose():
+    if request.method == 'GET':
+        return render_template('choose.html', goals=goals)
+    else:
+        topfive = request.form.getlist('goal')
+        for i in topfive:
+            goals.remove(i)
+        return render_template('list.html', topfive=topfive, goals=goals)
 
 
 @app.route('/add', methods=['GET', 'POST'])

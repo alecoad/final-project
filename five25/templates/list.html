@@ -1,12 +1,18 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <h1>Goals</h1>
+  <h1>TOP FIVE</h1>
+  <ul>
+    {% for goal in topfive %}
+      <li>{{ goal }}</li>
+    {% endfor %}
+  </ul>
+
+  <h1>AVOID AT ALL COSTS</h1>
   <ul>
     {% for goal in goals %}
       <li>{{ goal }}</li>
     {% endfor %}
   </ul>
 
-  <a href="/create">List Your Top 25 Goals</a>
 {% endblock %}

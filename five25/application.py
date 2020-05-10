@@ -9,13 +9,11 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-goals = []
 topfive = []
+goals = []
 
 @app.route('/')
 def index():
-    print(topfive)
-    print(goals)
     return render_template('index.html', topfive=topfive, goals=goals)
 
 
@@ -47,3 +45,9 @@ def add():
         goal = request.form.get('goal')
         goals.append(goal)
         return redirect('/')
+
+@app.route('/logout')
+def logout():
+    """Log user out"""
+    session.clear()
+    return redirect('/')

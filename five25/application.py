@@ -1,6 +1,14 @@
-from flask import Flask, redirect, render_template, request
+from flask import Flask, redirect, render_template, request, session
+
+from flask_session import Session
 
 app = Flask(__name__)
+
+# configure session to use filesystem (instead of signed cookies)
+#app.config["SESSION_FILE_DIR"] = mkdtemp()
+#app.config["SESSION_PERMANENT"] = False
+#app.config["SESSION_TYPE"] = "filesystem"
+#Session(app)
 
 goals = []
 topfive = []
@@ -17,10 +25,9 @@ def create():
     if request.method == 'GET':
         return render_template('create.html')
     else:
-        for i in range(5):
-            goal = request.form.get('goal' + str(i))
-            goals.append(goal)
-        return render_template('choose.html', goals=goals)
+        goal = request.form.get('goal')
+        goals.append(goal)
+        return render_template('create.html', goals=goals)
 
 
 @app.route('/choose', methods=['POST'])

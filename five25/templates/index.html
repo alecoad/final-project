@@ -4,7 +4,7 @@
   {% if goals|length %}
     <h1>TOP FIVE</h1>
     <ul>
-      {% for goal in topfive %}
+      {% for goal in toplist %}
         <li>{{ goal }}</li>
       {% endfor %}
     </ul>
@@ -16,6 +16,8 @@
       {% endfor %}
     </ul>
   {% else %}
-    <a href="/create">Create a List of Your Top 25 Goals</a>
+    <a href="{{ url_for('create') }}">Create a List of Your Top 25 Goals</a>
   {% endif %}
+
+  <a href="{{ url_for('logout') }}">Logout</a>
 {% endblock %}

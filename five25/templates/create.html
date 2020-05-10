@@ -3,13 +3,30 @@
 {% block js %}
   <script>
     let counter = 25;
+    let count = 0;
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // disable add button
+      document.querySelector('#add').disabled = true;
+      // loop through ordered list to count the goals
+      document.querySelectorAll('.goal-list').forEach(function(li) {
+        count++;
+      });
+      // enable submit button when text is entered and goals are less than 25
+      document.querySelector('#goal').onkeyup = function () {
+        if (document.querySelector('#goal').value.length > 0 && count < 25)
+          document.querySelector('#add').disabled = false;
+        else
+          document.querySelector('#add').disabled = true;
+      };
+    });
 
     document.addEventListener('DOMContentLoaded', function () {
       // disable submit button
       document.querySelector('#submit').disabled = true;
       // enable submit button when text is entered and empty goals remain
-      document.querySelector('#goal').onkeyup = function () {
-        if (document.querySelector('#goal').value.length > 0 && counter > 0)
+      document.querySelector('#goal2').onkeyup = function () {
+        if (document.querySelector('#goal2').value.length > 0 && counter > 0)
           document.querySelector('#submit').disabled = false;
         else
           document.querySelector('#submit').disabled = true;
@@ -17,11 +34,11 @@
       document.querySelector('#new-goal').onsubmit = function() {
         // create new list item with the value of the input
         const li = document.createElement('li');
-        li.innerHTML = document.querySelector('#goal').value;
+        li.innerHTML = document.querySelector('#goal2').value;
         // add goal to goal list
-        document.querySelector('#goals').append(li);
+        document.querySelector('#goals2').append(li);
         // clear input field
-        document.querySelector('#goal').value = '';
+        document.querySelector('#goal2').value = '';
         // stop form from submitting
         return false;
       };
@@ -39,10 +56,10 @@
   <h3>Let's try this version</h3>
   <h4>You have <span id="counter">25</span> goals left.
   <form id="new-goal">
-    <input id="goal" autocomplete="off" autofocus placeholder="New Goal" type="text">
+    <input id="goal2" autocomplete="off" placeholder="New Goal" type="text">
     <input id="submit" type="submit" onclick="count()">
   </form>
-  <ul id="goals">
+  <ul id="goals2">
   </ul>
 
   <a href="/choose">Click here to proceed</a>
@@ -50,15 +67,15 @@
   <hr><hr><hr>
 
   <form action="{{ url_for('create') }}" method="post">
-    <input type="text" name="goal" placeholder="Enter Goal Here" autofocus>
-    <button>Add Goal</button>
+    <input id="goal" type="text" name="goal" placeholder="Enter Goal Here" autocomplete="off" autofocus>
+    <button id="add" onclick="count()">Add Goal</button>
   </form>
 
-  <ul>
+  <ol id="goals">
     {% for goal in goals %}
-      <li>{{ goal }}</li>
+      <li class="goal-list">{{ goal }}</li>
     {% endfor %}
-  </ul>
+  </ol>
 
   <a href="/">Home</a>
 {% endblock %}

@@ -1,0 +1,12 @@
+CREATE TABLE user (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR NOT NULL,
+    password VARCHAR NOT NULL
+);
+
+CREATE TABLE goal (
+    id SERIAL PRIMARY KEY,
+    focus VARCHAR NOT NULL,
+    distraction BOOLEAN NOT NULL DEFAULT TRUE,
+    user_id INTEGER REFERENCES users
+);

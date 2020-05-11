@@ -5,4 +5,5 @@ flask_session/
 *.pyc
 __pycache__/
 
+db.txt
 .DS_Store

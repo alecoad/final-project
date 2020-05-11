@@ -1,12 +1,14 @@
 import os
+import requests
 
-from flask import flash, Flask, redirect, render_template, request, session
+from flask import Flask, jsonify, redirect, render_template, request, session
 from flask_session import Session
 from functools import wraps
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from werkzeug.security import check_password_hash, generate_password_hash
 
+# Configure application
 app = Flask(__name__)
 
 # Check for environment variable
@@ -39,30 +41,34 @@ def register():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+        confirmation = request.form.get('confirmation')
         error = None
+        print(password)
+        print(confirmation)
 
         if not username:
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
+        elif password != confirmation:
+            error = 'Password and confirmation must match.'
         elif db.execute(
-            'SELECT id FROM user WHERE username = :username', {'username': username}
+            'SELECT id FROM users WHERE username = :username', {'username': username}
         ).fetchone() is not None:
             error = 'User {} is already registered.'.format(username)
 
         if error is None:
             db.execute(
-                'INSERT INTO user (username, password) VALUES (?, ?)',
-                (username, generate_password_hash(password))
+                'INSERT INTO users (username, password) VALUES (:username, :password)',
+                {'username': username, 'password': generate_password_hash(password)}
             )
             db.commit()
             return redirect('/')
 
-        flash(error)
+        #flash(error)
         print(error)
 
     return render_template('register.html')
-
 
 
 @app.route('/create', methods=['GET', 'POST'])
@@ -83,7 +89,6 @@ def choose():
         if session.get('goals') is None:
             redirect('/create')
         return render_template('choose.html', goals=session['goals'])
-
     else:
         session['toplist'] = []
         topgoals = request.form.getlist('goal')
@@ -93,15 +98,6 @@ def choose():
 
         return redirect('/')
 
-
-@app.route('/add', methods=['GET', 'POST'])
-def add():
-    if request.method == 'GET':
-        return render_template('add.html')
-    else:
-        goal = request.form.get('goal')
-        goals.append(goal)
-        return redirect('/')
 
 @app.route('/logout')
 def logout():

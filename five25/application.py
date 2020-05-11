@@ -43,8 +43,6 @@ def register():
         password = request.form.get('password')
         confirmation = request.form.get('confirmation')
         error = None
-        print(password)
-        print(confirmation)
 
         if not username:
             error = 'Username is required.'
@@ -63,12 +61,51 @@ def register():
                 {'username': username, 'password': generate_password_hash(password)}
             )
             db.commit()
+
+            # Remember user
+            user = db.execute(
+                'SELECT * FROM users WHERE username = :username', {'username': username}
+            ).fetchone()
+            session['user_id'] = user['id']
+            print(session['user_id'])
+
             return redirect('/')
 
         #flash(error)
         print(error)
 
     return render_template('register.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    session.clear()
+
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        error = None
+        user = db.execute(
+            'SELECT * FROM users WHERE username = :username', {'username': username}
+        ).fetchone()
+        print(user)
+
+        if user is None:
+            error = 'Incorrect username.'
+        elif not check_password_hash(user['password'], password):
+            error = 'Incorrect password.'
+
+        if error is None:
+            session.clear()
+            session['user_id'] = user['id']
+            print(user['id'])
+            return redirect('/')
+
+        #flash(error)
+        print(error)
+
+    return render_template('login.html')
+
 
 
 @app.route('/create', methods=['GET', 'POST'])

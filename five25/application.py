@@ -8,6 +8,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from helpers import login_required
+
 # Configure application
 app = Flask(__name__)
 
@@ -105,7 +107,6 @@ def login():
         print(error)
 
     return render_template('login.html')
-
 
 
 @app.route('/create', methods=['GET', 'POST'])

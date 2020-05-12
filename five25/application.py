@@ -30,6 +30,7 @@ topfive = []
 goals = []
 
 @app.route('/')
+@login_required
 def index():
     # get user id
     user_id = session['user_id']
@@ -117,6 +118,7 @@ def login():
 
 
 @app.route('/create', methods=['GET', 'POST'])
+@login_required
 def create():
     # get user id
     user_id = session['user_id']
@@ -136,6 +138,7 @@ def create():
 
 
 @app.route('/choose', methods=['GET', 'POST'])
+@login_required
 def choose():
     # get user id
     user_id = session['user_id']
@@ -165,6 +168,11 @@ def choose():
     ).fetchall()
     # display goals for user to choose
     return render_template('choose.html', goals=goals)
+
+
+@app.route('/learn')
+def learn():
+    return render_template('learn.html')
 
 
 @app.route('/logout')

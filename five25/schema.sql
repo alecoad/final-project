@@ -1,12 +1,12 @@
-CREATE TABLE user (
+CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR NOT NULL,
     password VARCHAR NOT NULL
 );
 
-CREATE TABLE goal (
+CREATE TABLE goalss (
     id SERIAL PRIMARY KEY,
-    focus VARCHAR NOT NULL,
+    pursuit VARCHAR NOT NULL,
     distraction BOOLEAN NOT NULL DEFAULT TRUE,
     user_id INTEGER REFERENCES users
 );

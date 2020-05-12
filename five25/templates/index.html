@@ -3,23 +3,19 @@
 {% block title %}Home{% endblock %}
 
 {% block main %}
-  {% if goals|length %}
-    <h1>TOP FIVE</h1>
+    <h1>Task Master - Focus Edition</h1>
     <ul>
-      {% for goal in toplist %}
-        <li>{{ goal }}</li>
+      {% for goal in goals %}
+        <li>{{ goal.goal }}</li>
       {% endfor %}
     </ul>
 
-    <h1>AVOID AT ALL COSTS</h1>
+    <h1>Distractions</h1>
     <ul>
-      {% for goal in goals %}
-        <li>{{ goal }}</li>
+      {% for distraction in distractions %}
+        <li>{{ distraction.goal }}</li>
       {% endfor %}
     </ul>
-  {% else %}
-    <a href="{{ url_for('create') }}">Create a List of Your Top 25 Goals</a>
-  {% endif %}
 
   <a href="{{ url_for('logout') }}">Logout</a>
 {% endblock %}

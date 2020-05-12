@@ -7,7 +7,7 @@
   <form action="/choose" method="post">
     <ul>
       {% for goal in goals %}
-        <li><input type="checkbox" name="goal" value="{{ goal }}">{{ goal }}</li>
+        <li><input type="checkbox" name="goal" value="{{ goal.goal }}">{{ goal.goal }}</li>
       {% endfor %}
     </ul>
     <input type="submit" value="Submit">

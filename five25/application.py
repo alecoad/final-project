@@ -31,11 +31,18 @@ goals = []
 
 @app.route('/')
 def index():
-    if session.get('goals') is None:
-        session['goals'] = []
-    if session.get('toplist') is None:
-        session['toplist'] = []
-    return render_template('index.html', toplist=session['toplist'], goals=session['goals'])
+    # get user id
+    user_id = session['user_id']
+    # query for true goals
+    goals = db.execute(
+        'SELECT goal FROM pursuits WHERE user_id = :user_id AND distraction = FALSE', {'user_id': user_id}
+    ).fetchall()
+    # query for distractions
+    distractions = db.execute(
+        'SELECT goal FROM pursuits WHERE user_id = :user_id AND distraction = TRUE', {'user_id': user_id}
+    ).fetchall()
+
+    return render_template('index.html', goals=goals, distractions=distractions)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -111,30 +118,53 @@ def login():
 
 @app.route('/create', methods=['GET', 'POST'])
 def create():
-    if session.get('goals') is None:
-        session['goals'] = []
+    # get user id
+    user_id = session['user_id']
+
     if request.method == 'POST':
         goal = request.form.get('goal')
-        session['goals'].append(goal)
+        db.execute(
+            'INSERT INTO pursuits (goal, user_id) VALUES (:goal, :user_id)', {'goal': goal, 'user_id': user_id}
+        )
+        db.commit()
 
-    return render_template('create.html', goals=session['goals'])
+    goals = db.execute(
+        'SELECT goal FROM pursuits WHERE user_id = :user_id', {'user_id': user_id}
+    ).fetchall()
+
+    return render_template('create.html', goals=goals)
 
 
 @app.route('/choose', methods=['GET', 'POST'])
 def choose():
-    print(session.get('goals'))
-    if request.method == 'GET':
-        if session.get('goals') is None:
-            redirect('/create')
-        return render_template('choose.html', goals=session['goals'])
-    else:
-        session['toplist'] = []
-        topgoals = request.form.getlist('goal')
-        for goal in topgoals:
-            session['toplist'].append(goal)
-            session['goals'].remove(goal)
+    # get user id
+    user_id = session['user_id']
+
+    if request.method == 'POST':
+        # store the checked goals
+        top_goals = request.form.getlist('goal')
+        # change 'distraction' to FALSE for each chosen goal
+        for goal in top_goals:
+            db.execute(
+                'UPDATE pursuits SET distraction = FALSE WHERE user_id = :user_id AND goal = :goal', {'user_id': user_id, 'goal': goal}
+            )
+            print(goal)
+        db.commit()
 
         return redirect('/')
+
+    # check that goals exist
+    if db.execute(
+        'SELECT goal FROM pursuits WHERE user_id = :user_id', {'user_id': user_id}
+    ).fetchone() is None:
+        redirect('/create')
+
+    # query for all goals from user
+    goals = db.execute(
+        'SELECT goal FROM pursuits WHERE user_id = :user_id', {'user_id': user_id}
+    ).fetchall()
+    # display goals for user to choose
+    return render_template('choose.html', goals=goals)
 
 
 @app.route('/logout')

@@ -29,13 +29,13 @@
   <h2>What are your top 25 career goals?</h2>
 
   <form action="{{ url_for('create') }}" method="post">
-    <input id="goal" type="text" name="goal" placeholder="Enter Goal Here" autocomplete="off" autofocus>
+    <input id="task" type="text" name="task" placeholder="Enter Goal Here" autocomplete="off" autofocus>
     <button id="add" onclick="count()">Add Goal</button>
   </form>
 
-  <ol id="goals">
-    {% for goal in goals %}
-      <li class="goal-list">{{ goal.goal }}</li>
+  <ol id="tasks">
+    {% for task in tasks %}
+      <li class="task-list">{{ task.name }}</li>
     {% endfor %}
   </ol>
 

@@ -35,15 +35,15 @@ def index():
     # get user id
     user_id = session['user_id']
     # query for true goals
-    goals = db.execute(
-        'SELECT goal FROM pursuits WHERE user_id = :user_id AND distraction = FALSE', {'user_id': user_id}
+    tasks = db.execute(
+        'SELECT name FROM tasks WHERE user_id = :user_id AND distraction = FALSE', {'user_id': user_id}
     ).fetchall()
     # query for distractions
     distractions = db.execute(
-        'SELECT goal FROM pursuits WHERE user_id = :user_id AND distraction = TRUE', {'user_id': user_id}
+        'SELECT name FROM tasks WHERE user_id = :user_id AND distraction = TRUE', {'user_id': user_id}
     ).fetchall()
 
-    return render_template('index.html', goals=goals, distractions=distractions)
+    return render_template('index.html', tasks=tasks, distractions=distractions)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -124,17 +124,17 @@ def create():
     user_id = session['user_id']
 
     if request.method == 'POST':
-        goal = request.form.get('goal')
+        task = request.form.get('goal')
         db.execute(
-            'INSERT INTO pursuits (goal, user_id) VALUES (:goal, :user_id)', {'goal': goal, 'user_id': user_id}
+            'INSERT INTO tasks (name, user_id) VALUES (:task, :user_id)', {'task': task, 'user_id': user_id}
         )
         db.commit()
 
-    goals = db.execute(
-        'SELECT goal FROM pursuits WHERE user_id = :user_id', {'user_id': user_id}
+    tasks = db.execute(
+        'SELECT name FROM tasks WHERE user_id = :user_id', {'user_id': user_id}
     ).fetchall()
 
-    return render_template('create.html', goals=goals)
+    return render_template('create.html', tasks=tasks)
 
 
 @app.route('/choose', methods=['GET', 'POST'])
@@ -145,29 +145,29 @@ def choose():
 
     if request.method == 'POST':
         # store the checked goals
-        top_goals = request.form.getlist('goal')
+        priorities = request.form.getlist('task')
         # change 'distraction' to FALSE for each chosen goal
-        for goal in top_goals:
+        for priority in priorities:
             db.execute(
-                'UPDATE pursuits SET distraction = FALSE WHERE user_id = :user_id AND goal = :goal', {'user_id': user_id, 'goal': goal}
+                'UPDATE tasks SET distraction = FALSE WHERE user_id = :user_id AND name = :priority', {'user_id': user_id, 'priority': priority}
             )
-            print(goal)
+            print(priority)
         db.commit()
 
         return redirect('/')
 
     # check that goals exist
     if db.execute(
-        'SELECT goal FROM pursuits WHERE user_id = :user_id', {'user_id': user_id}
+        'SELECT name FROM tasks WHERE user_id = :user_id', {'user_id': user_id}
     ).fetchone() is None:
         redirect('/create')
 
     # query for all goals from user
-    goals = db.execute(
-        'SELECT goal FROM pursuits WHERE user_id = :user_id', {'user_id': user_id}
+    tasks = db.execute(
+        'SELECT name FROM tasks WHERE user_id = :user_id', {'user_id': user_id}
     ).fetchall()
     # display goals for user to choose
-    return render_template('choose.html', goals=goals)
+    return render_template('choose.html', tasks=tasks)
 
 
 @app.route('/learn')

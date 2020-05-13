@@ -6,8 +6,8 @@
   <h1>Choose your TOP FIVE most important goals.</h1>
   <form action="/choose" method="post">
     <ul>
-      {% for goal in goals %}
-        <li><input type="checkbox" name="goal" value="{{ goal.goal }}">{{ goal.goal }}</li>
+      {% for task in tasks %}
+        <li><input type="checkbox" name="task" value="{{ task.name }}">{{ task.name }}</li>
       {% endfor %}
     </ul>
     <input type="submit" value="Submit">

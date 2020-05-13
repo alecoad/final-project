@@ -5,15 +5,15 @@
 {% block main %}
     <h1>Task Master - Focus Edition</h1>
     <ul>
-      {% for goal in goals %}
-        <li>{{ goal.goal }}</li>
+      {% for task in tasks %}
+        <li>{{ task.name }}</li>
       {% endfor %}
     </ul>
 
     <h1>Distractions</h1>
     <ul>
       {% for distraction in distractions %}
-        <li>{{ distraction.goal }}</li>
+        <li>{{ distraction.name }}</li>
       {% endfor %}
     </ul>
 

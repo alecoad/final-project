@@ -1,12 +1,18 @@
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR NOT NULL,
-    password VARCHAR NOT NULL
+  id SERIAL PRIMARY KEY,
+  username VARCHAR NOT NULL,
+  password VARCHAR NOT NULL
 );
 
-CREATE TABLE goalss (
-    id SERIAL PRIMARY KEY,
-    pursuit VARCHAR NOT NULL,
-    distraction BOOLEAN NOT NULL DEFAULT TRUE,
-    user_id INTEGER REFERENCES users
+CREATE TABLE tasklists (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR NOT NULL UNIQUE,
+  user_id INTEGER REFERENCES users
+);
+
+CREATE TABLE tasks (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR NOT NULL,
+  distraction BOOLEAN NOT NULL DEFAULT TRUE,
+  list_id INTEGER REFERENCES tasklists
 );

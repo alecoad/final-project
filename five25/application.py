@@ -170,9 +170,9 @@ def choose():
     return render_template('choose.html', tasks=tasks)
 
 
-@app.route('/learn')
-def learn():
-    return render_template('learn.html')
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 
 @app.route('/logout')

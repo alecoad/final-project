@@ -2,13 +2,33 @@
 
 <html lang="en">
   <head>
-    {% block js %}{% endblock %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootswatch "Spacelab" Theme -->
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/spacelab/bootstrap.min.css" rel="stylesheet" integrity="sha384-nl8CRcNYOGaXP68QRJeVTXCWAhwqBhRha0QbuubX1qDQpGT3GgclpvyzkR2JzyfZ" crossorigin="anonymous">
+
+    <link href="/static/styles.css" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+
+    {% block javascript %}{% endblock %}
+
     <title>Five25 - {% block title %}{% endblock %}</title>
   <head>
 
   <body>
-    <nav class="navbar navbar-expand-md navbar-light bg-light border">
-      <a class="navbar-brand" href="/"><span class="blue">C</span><span class="red">S</span><span class="yellow">5</span><span class="green">0</span> <span class="red">Five25</span></a>
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+      <a class="navbar-brand" href="/"><span>Five25</span> - Focus Your Time</a>
       <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbar" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
       </button>

@@ -1,7 +1,7 @@
 import os
 import requests
 
-from flask import Flask, jsonify, redirect, render_template, request, session
+from flask import flash, Flask, jsonify, redirect, render_template, request, session
 from flask_session import Session
 from functools import wraps
 from sqlalchemy import create_engine
@@ -81,7 +81,7 @@ def register():
 
             return redirect('/')
 
-        #flash(error)
+        flash(error)
         print(error)
 
     return render_template('register.html')
@@ -111,7 +111,7 @@ def login():
             print(user['id'])
             return redirect('/')
 
-        #flash(error)
+        flash(error)
         print(error)
 
     return render_template('login.html')

@@ -137,9 +137,9 @@ def create():
     return render_template('create.html', tasks=tasks)
 
 
-@app.route('/choose', methods=['GET', 'POST'])
+@app.route('/focus', methods=['GET', 'POST'])
 @login_required
-def choose():
+def focus():
     # get user id
     user_id = session['user_id']
 
@@ -166,8 +166,8 @@ def choose():
     tasks = db.execute(
         'SELECT name FROM tasks WHERE user_id = :user_id', {'user_id': user_id}
     ).fetchall()
-    # display goals for user to choose
-    return render_template('choose.html', tasks=tasks)
+    # display goals for user to narrow focus
+    return render_template('focus.html', tasks=tasks)
 
 
 @app.route('/about')

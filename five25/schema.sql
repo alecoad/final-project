@@ -4,7 +4,7 @@ CREATE TABLE users (
   password VARCHAR NOT NULL
 );
 
-CREATE TABLE tasklists (
+CREATE TABLE lists (
   id SERIAL PRIMARY KEY,
   title VARCHAR NOT NULL UNIQUE,
   user_id INTEGER REFERENCES users
@@ -15,5 +15,5 @@ CREATE TABLE tasks (
   name VARCHAR NOT NULL,
   distraction BOOLEAN NOT NULL DEFAULT TRUE,
   completed BOOLEAN NOT NULL DEFAULT FALSE,
-  list_id INTEGER REFERENCES tasklists
+  list_id INTEGER REFERENCES lists
 );

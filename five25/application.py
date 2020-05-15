@@ -34,20 +34,53 @@ goals = []
 def index():
     # get user id
     user_id = session['user_id']
-    # query for true goals
-    tasks = db.execute(
-        'SELECT name FROM tasks WHERE user_id = :user_id AND distraction = FALSE', {'user_id': user_id}
+    # query all the user's lists
+    lists = db.execute(
+        'SELECT * FROM lists WHERE user_id = :user_id', {'user_id': user_id}
+    ).fetchall()
+
+    #fix later
+    list_id = 1
+    # query for focused tasks
+    focus = db.execute(
+        'SELECT name FROM tasks WHERE list_id = :list_id AND distraction = FALSE', {'list_id': list_id}
     ).fetchall()
     # query for distractions
     distractions = db.execute(
-        'SELECT name FROM tasks WHERE user_id = :user_id AND distraction = TRUE', {'user_id': user_id}
+        'SELECT name FROM tasks WHERE list_id = :list_id AND distraction = TRUE', {'list_id': list_id}
     ).fetchall()
     # query for completed tasks
     completed = db.execute(
-        'SELECT name FROM tasks WHERE user_id = :user_id AND completed = TRUE', {'user_id': user_id}
+        'SELECT name FROM tasks WHERE list_id = :list_id AND completed = TRUE', {'list_id': list_id}
     ).fetchall()
+    print(focus)
+    print(distractions)
+    print(completed)
 
-    return render_template('index.html', tasks=tasks, distractions=distractions, completed=completed)
+    return render_template('index.html', lists=lists, focus=focus, distractions=distractions, completed=completed)
+
+@app.route('/tasks/<int:list_id>')
+@login_required
+def tasks(list_id):
+    # get user id
+    user_id = session['user_id']
+    # query for focused tasks
+    focus = db.execute(
+        'SELECT name FROM tasks WHERE list_id = :list_id AND distraction = FALSE', {'list_id': list_id}
+    ).fetchall()
+    # query for distractions
+    distractions = db.execute(
+        'SELECT name FROM tasks WHERE list_id = :list_id AND distraction = TRUE', {'list_id': list_id}
+    ).fetchall()
+    # query for completed tasks
+    completed = db.execute(
+        'SELECT name FROM tasks WHERE list_id = :list_id AND completed = TRUE', {'list_id': list_id}
+    ).fetchall()
+    print(focus)
+    print(distractions)
+    print(completed)
+
+    return render_template('tasks.html', focus=focus, distractions=distractions, completed=completed)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -128,17 +161,32 @@ def create():
     user_id = session['user_id']
 
     if request.method == 'POST':
-        task = request.form.get('task')
+        # PROBABLY NEED SOME ERROR HANDLING...
+        # store and insert title into lists table
+        title = request.form.get('title')
         db.execute(
-            'INSERT INTO tasks (name, user_id) VALUES (:task, :user_id)', {'task': task, 'user_id': user_id}
+            'INSERT INTO lists (title, user_id) VALUES (:title, :user_id)', {'title': title, 'user_id': user_id}
         )
+        # get list_id
+        list_id = db.execute(
+            'SELECT id FROM lists WHERE title = :title', {'title': title}
+        ).fetchone()
+        # get the id of the tuple since fetchone() returns a Row-like object
+        list_id = list_id[0]
+        # store and enter each task into tasks table
+        tasks = request.form.getlist('task')
+        for task in tasks:
+            db.execute(
+                'INSERT INTO tasks (name, list_id) VALUES (:task, :list_id)', {'task': task, 'list_id': list_id}
+            )
         db.commit()
+        # store all the tasks (UNNECESSARY?)
+        tasks = db.execute(
+            'SELECT name FROM tasks WHERE list_id = :list_id', {'list_id': list_id}
+        ).fetchall()
+        return render_template('focus.html', list_id=list_id, tasks=tasks)
 
-    tasks = db.execute(
-        'SELECT name FROM tasks WHERE user_id = :user_id', {'user_id': user_id}
-    ).fetchall()
-
-    return render_template('create.html', tasks=tasks)
+    return render_template('create.html')
 
 
 @app.route('/focus', methods=['GET', 'POST'])
@@ -146,6 +194,12 @@ def create():
 def focus():
     # get user id
     user_id = session['user_id']
+    # get list_id
+    list_id = db.execute(
+        'SELECT id FROM lists WHERE user_id = :user_id', {'user_id': user_id}
+    ).fetchone()
+    # get the id of the tuple since fetchone() returns a Row-like object
+    list_id = list_id[0]
 
     if request.method == 'POST':
         # store the checked goals
@@ -153,7 +207,7 @@ def focus():
         # change 'distraction' to FALSE for each chosen goal
         for priority in priorities:
             db.execute(
-                'UPDATE tasks SET distraction = FALSE WHERE user_id = :user_id AND name = :priority', {'user_id': user_id, 'priority': priority}
+                'UPDATE tasks SET distraction = FALSE WHERE list_id = :list_id AND name = :priority', {'list_id': list_id, 'priority': priority}
             )
             print(priority)
         db.commit()
@@ -162,13 +216,13 @@ def focus():
 
     # check that goals exist
     if db.execute(
-        'SELECT name FROM tasks WHERE user_id = :user_id', {'user_id': user_id}
+        'SELECT name FROM tasks WHERE list_id = :list_id', {'list_id': list_id}
     ).fetchone() is None:
         redirect('/create')
 
-    # query for all goals from user
+    # query for all tasks in the list
     tasks = db.execute(
-        'SELECT name FROM tasks WHERE user_id = :user_id', {'user_id': user_id}
+        'SELECT name FROM tasks WHERE list_id = :list_id', {'list_id': list_id}
     ).fetchall()
     # display goals for user to narrow focus
     return render_template('focus.html', tasks=tasks)

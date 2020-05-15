@@ -1,16 +1,9 @@
 {% extends "layout.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Tasks{% endblock %}
 
 {% block main %}
-  <h1>Lists</h1>
-    <ul>
-      {% for list in lists %}
-        <li><a href="{{ url_for('tasks', list_id=list.id) }}">{{ list.title }}</a></li>
-      {% endfor %}
-    </ul>
-
-  <h1>Task Master - Focus Edition</h1>
+  <h1>Focus</h1>
   <ul>
     {% for task in focus %}
       <li>{{ task.name }}</li>

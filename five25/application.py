@@ -42,8 +42,12 @@ def index():
     distractions = db.execute(
         'SELECT name FROM tasks WHERE user_id = :user_id AND distraction = TRUE', {'user_id': user_id}
     ).fetchall()
+    # query for completed tasks
+    completed = db.execute(
+        'SELECT name FROM tasks WHERE user_id = :user_id AND completed = TRUE', {'user_id': user_id}
+    ).fetchall()
 
-    return render_template('index.html', tasks=tasks, distractions=distractions)
+    return render_template('index.html', tasks=tasks, distractions=distractions, completed=completed)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -124,7 +128,7 @@ def create():
     user_id = session['user_id']
 
     if request.method == 'POST':
-        task = request.form.get('goal')
+        task = request.form.get('task')
         db.execute(
             'INSERT INTO tasks (name, user_id) VALUES (:task, :user_id)', {'task': task, 'user_id': user_id}
         )
@@ -168,6 +172,11 @@ def focus():
     ).fetchall()
     # display goals for user to narrow focus
     return render_template('focus.html', tasks=tasks)
+
+
+@app.route('/complete')
+def complete():
+    return redirect('/')
 
 
 @app.route('/about')

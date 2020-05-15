@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block js %}
+{% block javascript %}
   <script>
     let count = 0;
 
@@ -8,13 +8,13 @@
       // disable add button
       document.querySelector('#add').disabled = true;
       // loop through ordered list to count the goals
-      document.querySelectorAll('.goal-list').forEach(function(li) {
+      document.querySelectorAll('.task-list').forEach(function(li) {
         count++;
         console.log(count);
       });
       // enable submit button when text is entered and goals are less than 25
-      document.querySelector('#goal').onkeyup = function () {
-        if (document.querySelector('#goal').value.length > 0 && count < 5)
+      document.querySelector('#task').onkeyup = function () {
+        if (document.querySelector('#task').value.length > 0 && count < 10)
           document.querySelector('#add').disabled = false;
         else
           document.querySelector('#add').disabled = true;
@@ -23,14 +23,14 @@
   </script>
 {% endblock %}
 
-{% block title %}Create Goals{% endblock %}
+{% block title %}Create List{% endblock %}
 
 {% block main %}
-  <h2>What are your top 25 career goals?</h2>
+  <h2>Create a Task List</h2>
 
   <form action="{{ url_for('create') }}" method="post">
-    <input id="task" type="text" name="task" placeholder="Enter Goal Here" autocomplete="off" autofocus>
-    <button id="add" onclick="count()">Add Goal</button>
+    <input id="task" type="text" name="task" placeholder="Enter a Task Here" autocomplete="off" autofocus>
+    <button id="add" onclick="count()">Add Task</button>
   </form>
 
   <ol id="tasks">
@@ -40,6 +40,4 @@
   </ol>
 
   <a href="{{ url_for('focus') }}">Next</a>
-
-  <a href="{{ url_for('logout') }}">Logout</a>
 {% endblock %}

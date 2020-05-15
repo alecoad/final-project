@@ -3,14 +3,15 @@
 {% block title %}Focus{% endblock %}
 
 {% block main %}
-  <h1>Choose your TOP FIVE most important goals.</h1>
-  <form action="/choose" method="post">
+  <h1>Which tasks will you focus on first?</h1>
+  <form action="/focus" method="post">
     <ul>
       {% for task in tasks %}
         <li><input type="checkbox" name="task" value="{{ task.name }}">{{ task.name }}</li>
       {% endfor %}
     </ul>
-    <input type="submit" value="Submit">
+    <input type="submit" value="Prioritize Tasks">
+    <input type="submit" formaction="/complete" value="Mark Completed">
   </form>
 
   <a href="/">Home</a>

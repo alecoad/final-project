@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Tasks{% endblock %}
 
 {% block main %}
     <h1>Task Master - Focus Edition</h1>
@@ -17,5 +17,10 @@
       {% endfor %}
     </ul>
 
-  <a href="{{ url_for('logout') }}">Logout</a>
+    <h1>Distractions</h1>
+    <ul>
+      {% for complete in completed %}
+        <li>{{ complete.name }}</li>
+      {% endfor %}
+    </ul>
 {% endblock %}

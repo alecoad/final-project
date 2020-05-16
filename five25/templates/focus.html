@@ -5,6 +5,7 @@
 {% block main %}
   <h1>Which tasks will you focus on first?</h1>
   <form action="/focus" method="post">
+    <h2>{{ title }}</h2>
     <ul>
       {% for task in tasks %}
         <li><input type="checkbox" name="task" value="{{ task.name }}">{{ task.name }}</li>

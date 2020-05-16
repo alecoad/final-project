@@ -3,24 +3,25 @@
 {% block title %}Tasks{% endblock %}
 
 {% block main %}
-  <h1>Focus</h1>
+  <h1>{{ title.title }}</h1>
+  <h3>Focus</h3>
   <ul>
     {% for task in focus %}
-      <li>{{ task.name }}</li>
+      <li><strong>{{ task.name }}</strong></li>
     {% endfor %}
   </ul>
 
-  <h1>Distractions</h1>
+  <h3>Distractions</h3>
   <ul>
     {% for task in distractions %}
-      <li>{{ task.name }}</li>
+      <li><em>{{ task.name }}</em></li>
     {% endfor %}
   </ul>
 
-  <h1>Completed</h1>
+  <h3>Completed</h3>
   <ul>
     {% for task in completed %}
-      <li>{{ task.name }}</li>
+      <li><strike>{{ task.name }}</strike></li>
     {% endfor %}
   </ul>
 {% endblock %}

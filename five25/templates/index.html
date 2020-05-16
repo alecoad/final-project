@@ -15,7 +15,7 @@
         {% for list in lists %}
           <tr>
             <td><a href="{{ url_for('tasks', list_id=list.id) }}">{{ list.title }}</a></td>
-            <td>{{ list.created }}</td>
+            <td>{{ list.created.strftime('%Y-%m-%d') }}</td>
           </tr>
         {% else %}
           <tr>

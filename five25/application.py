@@ -47,6 +47,10 @@ def tasks(list_id):
 
     user_id = session['user_id']
 
+    title = db.execute(
+        'SELECT title FROM lists WHERE id = :list_id', {'list_id': list_id}
+    ).fetchone()
+
     focus = db.execute(
         'SELECT name FROM tasks WHERE list_id = :list_id AND distraction = FALSE', {'list_id': list_id}
     ).fetchall()
@@ -59,7 +63,7 @@ def tasks(list_id):
         'SELECT name FROM tasks WHERE list_id = :list_id AND completed = TRUE', {'list_id': list_id}
     ).fetchall()
 
-    return render_template('tasks.html', focus=focus, distractions=distractions, completed=completed)
+    return render_template('tasks.html', title=title, focus=focus, distractions=distractions, completed=completed)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -147,30 +151,30 @@ def create():
     user_id = session['user_id']
 
     if request.method == 'POST':
-        # PROBABLY NEED SOME ERROR HANDLING...
-        # store and insert title into lists table
+        # get form data, list_id
         title = request.form.get('title')
-        db.execute(
-            'INSERT INTO lists (title, user_id) VALUES (:title, :user_id)', {'title': title, 'user_id': user_id}
-        )
-        # get list_id
+        tasks = request.form.getlist('task')
         list_id = db.execute(
             'SELECT id FROM lists WHERE title = :title', {'title': title}
         ).fetchone()
-        # get the id of the tuple since fetchone() returns a Row-like object
         list_id = list_id.id
-        # store and enter each task into tasks table
-        tasks = request.form.getlist('task')
+        # insert title and tasks into database
+        db.execute(
+            'INSERT INTO lists (title, user_id) VALUES (:title, :user_id)', {'title': title, 'user_id': user_id}
+        )
         for task in tasks:
             db.execute(
                 'INSERT INTO tasks (name, list_id) VALUES (:task, :list_id)', {'task': task, 'list_id': list_id}
             )
         db.commit()
-        # store all the tasks (UNNECESSARY?)
+        # store list name and tasks
         tasks = db.execute(
             'SELECT name FROM tasks WHERE list_id = :list_id', {'list_id': list_id}
         ).fetchall()
-        return render_template('focus.html', list_id=list_id, tasks=tasks)
+
+        flash('Success')
+
+        return render_template('focus.html', title=title, tasks=tasks)
 
     return render_template('create.html')
 

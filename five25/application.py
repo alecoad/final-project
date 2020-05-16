@@ -68,7 +68,11 @@ def tasks(list_id):
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    """Register user"""
+    """
+    Register user, adapted from the Flask Tutorial:
+
+    https://flask.palletsprojects.com/en/1.1.x/tutorial/views/
+    """
 
     if request.method == 'POST':
         username = request.form.get('username')
@@ -109,8 +113,12 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """Log user in and redirect to most recent task list"""
+    """
+    Log user in (adpated from the Flask Tutorial) and redirect to most recent task list
 
+    https://flask.palletsprojects.com/en/1.1.x/tutorial/views/
+    """
+    
     session.clear()
 
     if request.method == 'POST':

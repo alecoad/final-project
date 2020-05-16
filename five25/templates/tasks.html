@@ -18,7 +18,7 @@
       {% endfor %}
       {% for task in completed %}
         <li class="list-group-item list-group-item-light">
-          <input type="checkbox" name="task" value="{{ task.name }}">{{ task.name }}
+          <input type="checkbox" name="task" value="{{ task.name }}"><strike>{{ task.name }}</strike>
         </li>
       {% endfor %}
     </ul>

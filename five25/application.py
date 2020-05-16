@@ -45,8 +45,6 @@ def index():
 def tasks(list_id):
     """Display a task list."""
 
-    user_id = session['user_id']
-
     title = db.execute(
         'SELECT title FROM lists WHERE id = :list_id', {'list_id': list_id}
     ).fetchone()
@@ -192,10 +190,7 @@ def create():
 def focus(list_id):
     """Choose tasks to prioritize."""
 
-    user_id = session['user_id']
-
     priorities = request.form.getlist('task')
-    # change 'distraction' to FALSE for each chosen goal
     for priority in priorities:
         db.execute(
             'UPDATE tasks SET distraction = FALSE WHERE list_id = :list_id AND name = :priority', {'list_id': list_id, 'priority': priority}
@@ -206,13 +201,11 @@ def focus(list_id):
 
 
 @app.route('/complete/<int:list_id>', methods=['POST'])
+@login_required
 def complete(list_id):
     """Mark task(s) completed."""
 
-    user_id = session['user_id']
-
     completed = request.form.getlist('task')
-    # change 'completed' to TRUE for each goal
     for complete in completed:
         db.execute(
             'UPDATE tasks SET completed = TRUE WHERE list_id = :list_id AND name = :complete', {'list_id': list_id, 'complete': complete}
@@ -223,6 +216,7 @@ def complete(list_id):
 
 
 @app.route('/delete_task/<int:list_id>', methods=['POST'])
+@login_required
 def delete_task(list_id):
     """Delete checked task(s)."""
 

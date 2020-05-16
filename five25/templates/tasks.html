@@ -4,24 +4,15 @@
 
 {% block main %}
   <h1>{{ title.title }}</h1>
-  <h3>Focus</h3>
-  <ul>
+  <ul class="list-group">
     {% for task in focus %}
-      <li><strong>{{ task.name }}</strong></li>
+      <li class="list-group-item list-group-item-primary">{{ task.name }}</li>
     {% endfor %}
-  </ul>
-
-  <h3>Distractions</h3>
-  <ul>
     {% for task in distractions %}
-      <li><em>{{ task.name }}</em></li>
+      <li class="list-group-item list-group-item-danger">{{ task.name }}</li>
     {% endfor %}
-  </ul>
-
-  <h3>Completed</h3>
-  <ul>
     {% for task in completed %}
-      <li><strike>{{ task.name }}</strike></li>
+      <li class="list-group-item list-group-item-secondary">{{ task.name }}</li>
     {% endfor %}
   </ul>
 {% endblock %}

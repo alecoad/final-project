@@ -23,8 +23,8 @@
       {% endfor %}
     </ul>
     <input type="submit" formaction="{{ url_for('focus', list_id=list_id) }}" value="Prioritize">
-    <input type="submit" formaction="{{ url_for('focus', list_id=list_id) }}" value="Mark Completed">
-    <input type="submit" formaction="{{ url_for('focus', list_id=list_id) }}" value="Delete">
+    <input type="submit" formaction="{{ url_for('complete', list_id=list_id) }}" value="Mark Completed">
+    <input type="submit" formaction="{{ url_for('delete_task', list_id=list_id) }}" value="Delete">
     <input type="submit" formaction="{{ url_for('focus', list_id=list_id) }}" value="Delete List">
   </form>
 {% endblock %}

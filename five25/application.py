@@ -52,7 +52,7 @@ def tasks(list_id):
     ).fetchone()
 
     focus = db.execute(
-        'SELECT name FROM tasks WHERE list_id = :list_id AND distraction = FALSE', {'list_id': list_id}
+        'SELECT name FROM tasks WHERE list_id = :list_id AND distraction = FALSE AND completed = FALSE', {'list_id': list_id}
     ).fetchall()
 
     distractions = db.execute(
@@ -200,24 +200,40 @@ def focus(list_id):
         db.execute(
             'UPDATE tasks SET distraction = FALSE WHERE list_id = :list_id AND name = :priority', {'list_id': list_id, 'priority': priority}
         )
-        print(priority)
     db.commit()
 
     return redirect(url_for('tasks', list_id=list_id))
 
 
-@app.route('/complete')
-def complete():
+@app.route('/complete/<int:list_id>', methods=['POST'])
+def complete(list_id):
     """Mark task(s) completed."""
 
-    return redirect('/')
+    user_id = session['user_id']
+
+    completed = request.form.getlist('task')
+    # change 'completed' to TRUE for each goal
+    for complete in completed:
+        db.execute(
+            'UPDATE tasks SET completed = TRUE WHERE list_id = :list_id AND name = :complete', {'list_id': list_id, 'complete': complete}
+        )
+    db.commit()
+
+    return redirect(url_for('tasks', list_id=list_id))
 
 
-@app.route('/delete_task')
-def delete_task():
+@app.route('/delete_task/<int:list_id>', methods=['POST'])
+def delete_task(list_id):
     """Delete checked task(s)."""
 
-    return redirect('/')
+    deleted = request.form.getlist('task')
+    for delete in deleted:
+        db.execute(
+            'DELETE FROM tasks WHERE list_id = :list_id AND name = :delete', {'list_id': list_id, 'delete': delete}
+        )
+    db.commit()
+
+    return redirect(url_for('tasks', list_id=list_id))
 
 
 @app.route('/delete_list')

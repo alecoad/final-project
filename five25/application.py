@@ -30,7 +30,7 @@ db = scoped_session(sessionmaker(bind=engine))
 @app.route('/')
 @login_required
 def index():
-    """Show table of user's task lists"""
+    """Show table of user's task lists."""
 
     user_id = session['user_id']
     lists = db.execute(
@@ -43,7 +43,7 @@ def index():
 @app.route('/tasks/<int:list_id>')
 @login_required
 def tasks(list_id):
-    """Display a task list"""
+    """Display a task list."""
 
     user_id = session['user_id']
 
@@ -63,13 +63,13 @@ def tasks(list_id):
         'SELECT name FROM tasks WHERE list_id = :list_id AND completed = TRUE', {'list_id': list_id}
     ).fetchall()
 
-    return render_template('tasks.html', title=title, focus=focus, distractions=distractions, completed=completed)
+    return render_template('tasks.html', list_id=list_id, title=title, focus=focus, distractions=distractions, completed=completed)
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     """
-    Register user, adapted from the Flask Tutorial:
+    Register user, adapted from the Flask Tutorial.
 
     https://flask.palletsprojects.com/en/1.1.x/tutorial/views/
     """
@@ -114,11 +114,11 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """
-    Log user in (adpated from the Flask Tutorial) and redirect to most recent task list
+    Log user in (adpated from the Flask Tutorial) and redirect to most recent task list.
 
     https://flask.palletsprojects.com/en/1.1.x/tutorial/views/
     """
-    
+
     session.clear()
 
     if request.method == 'POST':
@@ -154,7 +154,7 @@ def login():
 @app.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
-    """Create a task list"""
+    """Create a task list."""
 
     user_id = session['user_id']
 
@@ -187,64 +187,56 @@ def create():
     return render_template('create.html')
 
 
-@app.route('/focus', methods=['GET', 'POST'])
+@app.route('/focus/<int:list_id>', methods=['POST'])
 @login_required
-def focus():
-    """Choose tasks to focus on"""
+def focus(list_id):
+    """Choose tasks to prioritize."""
 
-    # get user id
     user_id = session['user_id']
-    # get list_id
-    list_id = db.execute(
-        'SELECT id FROM lists WHERE user_id = :user_id', {'user_id': user_id}
-    ).fetchone()
-    # get the id of the tuple since fetchone() returns a Row-like object
-    list_id = list_id.id
 
-    if request.method == 'POST':
-        # store the checked goals
-        priorities = request.form.getlist('task')
-        # change 'distraction' to FALSE for each chosen goal
-        for priority in priorities:
-            db.execute(
-                'UPDATE tasks SET distraction = FALSE WHERE list_id = :list_id AND name = :priority', {'list_id': list_id, 'priority': priority}
-            )
-            print(priority)
-        db.commit()
+    priorities = request.form.getlist('task')
+    # change 'distraction' to FALSE for each chosen goal
+    for priority in priorities:
+        db.execute(
+            'UPDATE tasks SET distraction = FALSE WHERE list_id = :list_id AND name = :priority', {'list_id': list_id, 'priority': priority}
+        )
+        print(priority)
+    db.commit()
 
-        return redirect('/')
-
-    # check that goals exist
-    if db.execute(
-        'SELECT name FROM tasks WHERE list_id = :list_id', {'list_id': list_id}
-    ).fetchone() is None:
-        redirect('/create')
-
-    # query for all tasks in the list
-    tasks = db.execute(
-        'SELECT name FROM tasks WHERE list_id = :list_id', {'list_id': list_id}
-    ).fetchall()
-    # display goals for user to narrow focus
-    return render_template('focus.html', tasks=tasks)
+    return redirect(url_for('tasks', list_id=list_id))
 
 
 @app.route('/complete')
 def complete():
-    """Mark tasks completed"""
+    """Mark task(s) completed."""
+
+    return redirect('/')
+
+
+@app.route('/delete_task')
+def delete_task():
+    """Delete checked task(s)."""
+
+    return redirect('/')
+
+
+@app.route('/delete_list')
+def delete_list():
+    """Delete the list."""
 
     return redirect('/')
 
 
 @app.route('/about')
 def about():
-    """Display about page"""
+    """Display about page."""
 
     return render_template('about.html')
 
 
 @app.route('/logout')
 def logout():
-    """Log user out"""
+    """Log user out."""
 
     session.clear()
     return redirect('/')

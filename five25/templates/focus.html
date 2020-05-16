@@ -4,7 +4,7 @@
 
 {% block main %}
   <h1>Which tasks will you focus on first?</h1>
-  <form action="/focus" method="post">
+  <form action="{{ url_for('focus', list_id=list.id) }}" method="post">
     <h2>{{ title }}</h2>
     <ul>
       {% for task in tasks %}

@@ -1,7 +1,7 @@
 import os
 import requests
 
-from flask import flash, Flask, jsonify, redirect, render_template, request, session
+from flask import flash, Flask, jsonify, redirect, render_template, request, session, url_for
 from flask_session import Session
 from functools import wraps
 from sqlalchemy import create_engine
@@ -26,65 +26,46 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
-topfive = []
-goals = []
 
 @app.route('/')
 @login_required
 def index():
-    # get user id
+    """Show table of user's task lists"""
+
     user_id = session['user_id']
-    # query all the user's lists
     lists = db.execute(
-        'SELECT * FROM lists WHERE user_id = :user_id', {'user_id': user_id}
+        'SELECT * FROM lists WHERE user_id = :user_id ORDER BY created DESC', {'user_id': user_id}
     ).fetchall()
 
-    #fix later
-    list_id = 1
-    # query for focused tasks
-    focus = db.execute(
-        'SELECT name FROM tasks WHERE list_id = :list_id AND distraction = FALSE', {'list_id': list_id}
-    ).fetchall()
-    # query for distractions
-    distractions = db.execute(
-        'SELECT name FROM tasks WHERE list_id = :list_id AND distraction = TRUE', {'list_id': list_id}
-    ).fetchall()
-    # query for completed tasks
-    completed = db.execute(
-        'SELECT name FROM tasks WHERE list_id = :list_id AND completed = TRUE', {'list_id': list_id}
-    ).fetchall()
-    print(focus)
-    print(distractions)
-    print(completed)
+    return render_template('index.html', lists=lists)
 
-    return render_template('index.html', lists=lists, focus=focus, distractions=distractions, completed=completed)
 
 @app.route('/tasks/<int:list_id>')
 @login_required
 def tasks(list_id):
-    # get user id
+    """Display a task list"""
+
     user_id = session['user_id']
-    # query for focused tasks
+
     focus = db.execute(
         'SELECT name FROM tasks WHERE list_id = :list_id AND distraction = FALSE', {'list_id': list_id}
     ).fetchall()
-    # query for distractions
+
     distractions = db.execute(
         'SELECT name FROM tasks WHERE list_id = :list_id AND distraction = TRUE', {'list_id': list_id}
     ).fetchall()
-    # query for completed tasks
+
     completed = db.execute(
         'SELECT name FROM tasks WHERE list_id = :list_id AND completed = TRUE', {'list_id': list_id}
     ).fetchall()
-    print(focus)
-    print(distractions)
-    print(completed)
 
     return render_template('tasks.html', focus=focus, distractions=distractions, completed=completed)
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    """Register user"""
+
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
@@ -114,18 +95,18 @@ def register():
                 'SELECT * FROM users WHERE username = :username', {'username': username}
             ).fetchone()
             session['user_id'] = user['id']
-            print(session['user_id'])
 
             return redirect('/')
 
         flash(error)
-        print(error)
 
     return render_template('register.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """Log user in and redirect to most recent task list"""
+
     session.clear()
 
     if request.method == 'POST':
@@ -135,7 +116,6 @@ def login():
         user = db.execute(
             'SELECT * FROM users WHERE username = :username', {'username': username}
         ).fetchone()
-        print(user)
 
         if user is None:
             error = 'Incorrect username.'
@@ -145,11 +125,16 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['id']
-            print(user['id'])
-            return redirect('/')
+            list = db.execute(
+                'SELECT * FROM lists WHERE user_id = :user_id ORDER BY created DESC', {'user_id': session['user_id']}
+            ).fetchone()
+            if list is None:
+                return redirect('/')
+            else:
+                list_id = list.id
+                return redirect(url_for('tasks', list_id=list.id))
 
         flash(error)
-        print(error)
 
     return render_template('login.html')
 
@@ -157,7 +142,8 @@ def login():
 @app.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
-    # get user id
+    """Create a task list"""
+
     user_id = session['user_id']
 
     if request.method == 'POST':
@@ -172,7 +158,7 @@ def create():
             'SELECT id FROM lists WHERE title = :title', {'title': title}
         ).fetchone()
         # get the id of the tuple since fetchone() returns a Row-like object
-        list_id = list_id[0]
+        list_id = list_id.id
         # store and enter each task into tasks table
         tasks = request.form.getlist('task')
         for task in tasks:
@@ -192,6 +178,8 @@ def create():
 @app.route('/focus', methods=['GET', 'POST'])
 @login_required
 def focus():
+    """Choose tasks to focus on"""
+
     # get user id
     user_id = session['user_id']
     # get list_id
@@ -199,7 +187,7 @@ def focus():
         'SELECT id FROM lists WHERE user_id = :user_id', {'user_id': user_id}
     ).fetchone()
     # get the id of the tuple since fetchone() returns a Row-like object
-    list_id = list_id[0]
+    list_id = list_id.id
 
     if request.method == 'POST':
         # store the checked goals
@@ -230,16 +218,21 @@ def focus():
 
 @app.route('/complete')
 def complete():
+    """Mark tasks completed"""
+
     return redirect('/')
 
 
 @app.route('/about')
 def about():
+    """Display about page"""
+
     return render_template('about.html')
 
 
 @app.route('/logout')
 def logout():
     """Log user out"""
+
     session.clear()
     return redirect('/')

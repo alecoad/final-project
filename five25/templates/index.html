@@ -3,31 +3,25 @@
 {% block title %}Home{% endblock %}
 
 {% block main %}
-  <h1>Lists</h1>
-    <ul>
-      {% for list in lists %}
-        <li><a href="{{ url_for('tasks', list_id=list.id) }}">{{ list.title }}</a></li>
-      {% endfor %}
-    </ul>
-
-  <h1>Task Master - Focus Edition</h1>
-  <ul>
-    {% for task in focus %}
-      <li>{{ task.name }}</li>
-    {% endfor %}
-  </ul>
-
-  <h1>Distractions</h1>
-  <ul>
-    {% for task in distractions %}
-      <li>{{ task.name }}</li>
-    {% endfor %}
-  </ul>
-
-  <h1>Completed</h1>
-  <ul>
-    {% for task in completed %}
-      <li>{{ task.name }}</li>
-    {% endfor %}
-  </ul>
+  <h1>Your Lists</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Date Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for list in lists %}
+          <tr>
+            <td><a href="{{ url_for('tasks', list_id=list.id) }}">{{ list.title }}</a></td>
+            <td>{{ list.created }}</td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="2">You have not created any task lists yet!</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 {% endblock %}

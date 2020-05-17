@@ -10,21 +10,21 @@
         <ul class="list-group checked-list-box">
           <div class="btn-group-toggle" data-toggle="buttons">
             {% for task in focus %}
-              <li class="list-group-item list-group-item-success btn btn-square">
+              <li class="list-group-item list-group-item-success btn btn-custom">
                 <input type="checkbox" name="task" value="{{ task.name }}">{{ task.name }}
               </li>
             {% endfor %}
           </div>
           <div class="btn-group-toggle" data-toggle="buttons">
             {% for task in distractions %}
-              <li class="list-group-item list-group-item-danger btn btn-square">
+              <li class="list-group-item list-group-item-danger btn btn-custom">
                 <input type="checkbox" name="task" value="{{ task.name }}">{{ task.name }}
               </li>
             {% endfor %}
           </div>
           <div class="btn-group-toggle" data-toggle="buttons">
             {% for task in completed %}
-              <li class="list-group-item list-group-item-light btn btn-square">
+              <li class="list-group-item list-group-item-light btn btn-custom">
                 <input type="checkbox" name="task" value="{{ task.name }}"><strike>{{ task.name }}</strike>
               </li>
             {% endfor %}

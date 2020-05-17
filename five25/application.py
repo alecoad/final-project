@@ -245,6 +245,27 @@ def delete_list(list_id):
     return redirect('/')
 
 
+@app.route('/add/<int:list_id>', methods=['GET', 'POST'])
+@login_required
+def add(list_id):
+    """Add a task to the list."""
+
+    list = db.execute(
+        'SELECT * FROM lists WHERE id = :list_id', {'list_id': list_id}
+    ).fetchone()
+
+    if request.method == 'POST':
+        task = request.form.get('task')
+        db.execute(
+            'INSERT INTO tasks (name, list_id) VALUES (:task, :list_id)', {'task': task, 'list_id': list_id}
+        )
+        db.commit()
+
+        return redirect(url_for('tasks', list_id=list_id))
+
+    return render_template('add.html', list=list)
+
+
 @app.route('/about')
 def about():
     """Display about page."""

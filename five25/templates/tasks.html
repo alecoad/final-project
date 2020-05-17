@@ -39,9 +39,9 @@
         <button type="submit" class="btn btn-outline-dark btn-md btn-custom-mobile" formaction="{{ url_for('delete_task', list_id=list.id) }}">
           Delete
         </button>
-        <button type="submit" class="btn btn-outline-warning btn-md btn-custom-mobile" formaction="{{ url_for('focus', list_id=list.id) }}" onclick="return confirm('Are you absolutely sure?')">
-          Add
-        </button>
+        <a href="/add/{{ list.id }}">
+          <button type="button" class="btn btn-outline-warning btn-md btn-custom-mobile">Add</button>
+        </a>
         <button type="submit" class="btn btn-outline-danger btn-md btn-custom-mobile" formaction="{{ url_for('delete_list', list_id=list.id) }}" onclick="return confirm('Are you absolutely sure?')">
           Delete List
         </button>

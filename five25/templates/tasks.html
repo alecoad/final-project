@@ -24,12 +24,18 @@
             </li>
           {% endfor %}
         </ul>
-        <button type="submit" class="btn btn-primary btn-lg btn-block" formaction="{{ url_for('focus', list_id=list_id) }}">
+        <button type="submit" class="btn btn-success btn-md" formaction="{{ url_for('focus', list_id=list_id) }}">
           Prioritize
         </button>
-        <input type="submit" formaction="{{ url_for('complete', list_id=list_id) }}" value="Mark Completed">
-        <input type="submit" formaction="{{ url_for('delete_task', list_id=list_id) }}" value="Delete">
-        <input type="submit" formaction="{{ url_for('focus', list_id=list_id) }}" value="Delete List">
+        <button type="submit" class="btn btn-primary btn-md" formaction="{{ url_for('complete', list_id=list_id) }}">
+          Complete
+        </button>
+        <button type="submit" class="btn btn-secondary btn-md" formaction="{{ url_for('delete_task', list_id=list_id) }}">
+          Delete
+        </button>
+        <button type="submit" class="btn btn-warning btn-md" formaction="{{ url_for('focus', list_id=list_id) }}" onclick="return confirm('Are you absolutely sure?')">
+          Delete List
+        </button>
       </form>
     </div>
   </div>

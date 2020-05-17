@@ -24,16 +24,19 @@
             </li>
           {% endfor %}
         </ul>
-        <button type="submit" class="btn btn-success btn-md" formaction="{{ url_for('focus', list_id=list_id) }}">
+        <button type="submit" class="btn btn-outline-success btn-md btn-block" formaction="{{ url_for('focus', list_id=list_id) }}">
           Prioritize
         </button>
-        <button type="submit" class="btn btn-primary btn-md" formaction="{{ url_for('complete', list_id=list_id) }}">
+        <button type="submit" class="btn btn-outline-primary btn-md btn-block" formaction="{{ url_for('complete', list_id=list_id) }}">
           Complete
         </button>
-        <button type="submit" class="btn btn-secondary btn-md" formaction="{{ url_for('delete_task', list_id=list_id) }}">
+        <button type="submit" class="btn btn-outline-secondary btn-md btn-block" formaction="{{ url_for('delete_task', list_id=list_id) }}">
           Delete
         </button>
-        <button type="submit" class="btn btn-warning btn-md" formaction="{{ url_for('focus', list_id=list_id) }}" onclick="return confirm('Are you absolutely sure?')">
+        <button type="submit" class="btn btn-outline-info btn-md btn-block" formaction="{{ url_for('focus', list_id=list_id) }}" onclick="return confirm('Are you absolutely sure?')">
+          Add Task
+        </button>
+        <button type="submit" class="btn btn-outline-danger btn-md btn-block" formaction="{{ url_for('focus', list_id=list_id) }}" onclick="return confirm('Are you absolutely sure?')">
           Delete List
         </button>
       </form>

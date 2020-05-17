@@ -4,24 +4,28 @@
 
 {% block main %}
   <h1>Your Lists</h1>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Date Created</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for list in lists %}
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <table class="table table-striped">
+        <thead>
           <tr>
-            <td><a href="{{ url_for('tasks', list_id=list.id) }}">{{ list.title }}</a></td>
-            <td>{{ list.created.strftime('%Y-%m-%d') }}</td>
+            <th>Title</th>
+            <th>Date Created</th>
           </tr>
-        {% else %}
-          <tr>
-            <td colspan="2">You have not created any task lists yet!</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for list in lists %}
+            <tr>
+              <td><a href="{{ url_for('tasks', list_id=list.id) }}">{{ list.title }}</a></td>
+              <td>{{ list.created.strftime('%Y-%m-%d') }}</td>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="2">You have not created any task lists yet!</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 {% endblock %}

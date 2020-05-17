@@ -8,35 +8,41 @@
     <div class="col-lg-8">
       <form action="" method="post">
         <ul class="list-group checked-list-box">
-          {% for task in focus %}
-            <li class="list-group-item list-group-item-success">
-              <input type="checkbox" name="task" value="{{ task.name }}">{{ task.name }}
-            </li>
-          {% endfor %}
-          {% for task in distractions %}
-            <li class="list-group-item list-group-item-danger">
-              <input type="checkbox" name="task" value="{{ task.name }}">{{ task.name }}
-            </li>
-          {% endfor %}
-          {% for task in completed %}
-            <li class="list-group-item list-group-item-light">
-              <input type="checkbox" name="task" value="{{ task.name }}"><strike>{{ task.name }}</strike>
-            </li>
-          {% endfor %}
+          <div class="btn-group-toggle" data-toggle="buttons">
+            {% for task in focus %}
+              <li class="list-group-item list-group-item-success btn btn-square">
+                <input type="checkbox" name="task" value="{{ task.name }}">{{ task.name }}
+              </li>
+            {% endfor %}
+          </div>
+          <div class="btn-group-toggle" data-toggle="buttons">
+            {% for task in distractions %}
+              <li class="list-group-item list-group-item-danger btn btn-square">
+                <input type="checkbox" name="task" value="{{ task.name }}">{{ task.name }}
+              </li>
+            {% endfor %}
+          </div>
+          <div class="btn-group-toggle" data-toggle="buttons">
+            {% for task in completed %}
+              <li class="list-group-item list-group-item-light btn btn-square">
+                <input type="checkbox" name="task" value="{{ task.name }}"><strike>{{ task.name }}</strike>
+              </li>
+            {% endfor %}
+          </div>
         </ul>
-        <button type="submit" class="btn btn-outline-success btn-md btn-block" formaction="{{ url_for('focus', list_id=list.id) }}">
-          Prioritize
+        <button type="submit" class="btn btn-outline-success btn-md btn-custom-mobile" formaction="{{ url_for('focus', list_id=list.id) }}">
+          Focus
         </button>
-        <button type="submit" class="btn btn-outline-primary btn-md btn-block" formaction="{{ url_for('complete', list_id=list.id) }}">
+        <button type="submit" class="btn btn-outline-primary btn-md btn-custom-mobile" formaction="{{ url_for('complete', list_id=list.id) }}">
           Complete
         </button>
-        <button type="submit" class="btn btn-outline-secondary btn-md btn-block" formaction="{{ url_for('delete_task', list_id=list.id) }}">
+        <button type="submit" class="btn btn-outline-dark btn-md btn-custom-mobile" formaction="{{ url_for('delete_task', list_id=list.id) }}">
           Delete
         </button>
-        <button type="submit" class="btn btn-outline-info btn-md btn-block" formaction="{{ url_for('focus', list_id=list.id) }}" onclick="return confirm('Are you absolutely sure?')">
-          Add Task
+        <button type="submit" class="btn btn-outline-warning btn-md btn-custom-mobile" formaction="{{ url_for('focus', list_id=list.id) }}" onclick="return confirm('Are you absolutely sure?')">
+          Add
         </button>
-        <button type="submit" class="btn btn-outline-danger btn-md btn-block" formaction="{{ url_for('delete_list', list_id=list.id) }}" onclick="return confirm('Are you absolutely sure?')">
+        <button type="submit" class="btn btn-outline-danger btn-md btn-custom-mobile" formaction="{{ url_for('delete_list', list_id=list.id) }}" onclick="return confirm('Are you absolutely sure?')">
           Delete List
         </button>
       </form>

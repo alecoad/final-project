@@ -21,3 +21,15 @@ ul {
   padding-bottom: 0.5rem;
   text-align: left;
 }
+
+.btn.btn-square {
+  border-radius: 0;
+}
+
+@media all and (max-width:520px) {
+  .btn-custom-mobile {
+    width: 100%;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+}

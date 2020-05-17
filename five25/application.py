@@ -45,8 +45,8 @@ def index():
 def tasks(list_id):
     """Display a task list."""
 
-    title = db.execute(
-        'SELECT title FROM lists WHERE id = :list_id', {'list_id': list_id}
+    list = db.execute(
+        'SELECT * FROM lists WHERE id = :list_id', {'list_id': list_id}
     ).fetchone()
 
     focus = db.execute(
@@ -61,7 +61,7 @@ def tasks(list_id):
         'SELECT name FROM tasks WHERE list_id = :list_id AND completed = TRUE', {'list_id': list_id}
     ).fetchall()
 
-    return render_template('tasks.html', list_id=list_id, title=title, focus=focus, distractions=distractions, completed=completed)
+    return render_template('tasks.html', list=list, focus=focus, distractions=distractions, completed=completed)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -157,30 +157,29 @@ def create():
     user_id = session['user_id']
 
     if request.method == 'POST':
-        # get form data, list_id
         title = request.form.get('title')
-        tasks = request.form.getlist('task')
-        list_id = db.execute(
-            'SELECT id FROM lists WHERE title = :title', {'title': title}
-        ).fetchone()
-        list_id = list_id.id
-        # insert title and tasks into database
         db.execute(
             'INSERT INTO lists (title, user_id) VALUES (:title, :user_id)', {'title': title, 'user_id': user_id}
         )
+        # 'order by created desc' in case there are multiple lists with the same name, this provides the most recent
+        list = db.execute(
+            'SELECT * FROM lists WHERE title = :title AND user_id = :user_id ORDER BY created DESC', {'title': title, 'user_id': user_id}
+        ).fetchone()
+        list_id = list.id
+        tasks = request.form.getlist('task')
         for task in tasks:
             db.execute(
                 'INSERT INTO tasks (name, list_id) VALUES (:task, :list_id)', {'task': task, 'list_id': list_id}
             )
         db.commit()
-        # store list name and tasks
-        tasks = db.execute(
+
+        distractions = db.execute(
             'SELECT name FROM tasks WHERE list_id = :list_id', {'list_id': list_id}
         ).fetchall()
 
         flash('Success')
 
-        return render_template('focus.html', title=title, tasks=tasks)
+        return render_template('tasks.html', list=list, distractions=distractions)
 
     return render_template('create.html')
 
@@ -230,9 +229,18 @@ def delete_task(list_id):
     return redirect(url_for('tasks', list_id=list_id))
 
 
-@app.route('/delete_list')
-def delete_list():
+@app.route('/delete_list/<int:list_id>', methods=['POST'])
+@login_required
+def delete_list(list_id):
     """Delete the list."""
+
+    db.execute(
+        'DELETE FROM tasks WHERE list_id = :list_id', {'list_id': list_id}
+    )
+    db.execute(
+        'DELETE FROM lists WHERE id = :list_id', {'list_id': list_id}
+    )
+    db.commit()
 
     return redirect('/')
 

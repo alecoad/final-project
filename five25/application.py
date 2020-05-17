@@ -54,7 +54,7 @@ def tasks(list_id):
     ).fetchall()
 
     distractions = db.execute(
-        'SELECT name FROM tasks WHERE list_id = :list_id AND distraction = TRUE', {'list_id': list_id}
+        'SELECT name FROM tasks WHERE list_id = :list_id AND distraction = TRUE and completed = FALSE', {'list_id': list_id}
     ).fetchall()
 
     completed = db.execute(
@@ -188,12 +188,12 @@ def create():
 @app.route('/focus/<int:list_id>', methods=['POST'])
 @login_required
 def focus(list_id):
-    """Choose tasks to prioritize."""
+    """Choose tasks to prioritize (or unprioritize)."""
 
     priorities = request.form.getlist('task')
     for priority in priorities:
         db.execute(
-            'UPDATE tasks SET distraction = FALSE WHERE list_id = :list_id AND name = :priority', {'list_id': list_id, 'priority': priority}
+            'UPDATE tasks SET distraction = NOT distraction WHERE list_id = :list_id AND name = :priority', {'list_id': list_id, 'priority': priority}
         )
     db.commit()
 

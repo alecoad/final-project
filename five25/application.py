@@ -177,9 +177,9 @@ def create():
             'SELECT name FROM tasks WHERE list_id = :list_id', {'list_id': list_id}
         ).fetchall()
 
-        flash('Success')
+        flash('Your list has been created. Now choose the tasks to prioritize.')
 
-        return render_template('tasks.html', list=list, distractions=distractions)
+        return redirect(url_for('tasks', list_id=list_id))
 
     return render_template('create.html')
 

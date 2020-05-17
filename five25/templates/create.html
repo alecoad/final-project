@@ -2,22 +2,37 @@
 
 {% block javascript %}
   <script>
-    let count = 0;
-
     document.addEventListener('DOMContentLoaded', function () {
-      // disable add button
-      document.querySelector('#add').disabled = true;
-      // loop through ordered list to count the goals
-      document.querySelectorAll('.task-list').forEach(function(li) {
-        count++;
-        console.log(count);
-      });
-      // enable submit button when text is entered and goals are less than 25
-      document.querySelector('#task').onkeyup = function () {
-        if (document.querySelector('#task').value.length > 0 && count < 10)
-          document.querySelector('#add').disabled = false;
+      let count = 0;
+      // disable create button
+      document.querySelector('#create').disabled = true;
+      // enable submit button when title is entered
+      document.querySelector('#title').onkeyup = function () {
+        if (document.querySelector('#title').value.length > 0)
+          document.querySelector('#create').disabled = false;
         else
-          document.querySelector('#add').disabled = true;
+          document.querySelector('#create').disabled = true;
+      };
+      // add input field when add task button is clicked
+      document.querySelector('#add').onclick = function () {
+        count++;
+        // create elements
+        const div = document.createElement('div');
+        const input = document.createElement('input');
+        // assign classes, id, and attributes
+        div.classList.add('input-group', 'mb-2');
+        input.classList.add('form-control');
+        input.id = 'task' + count;
+        input.setAttribute('type', 'text');
+        input.setAttribute('name', 'task');
+        input.setAttribute('placeholder', 'Task');
+        input.setAttribute('autocomplete', 'off');
+        // place input within div
+        div.append(input);
+        // append new input field to the form
+        document.querySelector('#tasks').append(div);
+        // autofocus new input field
+        document.querySelector('#task' + count).focus();
       };
     });
   </script>
@@ -29,25 +44,18 @@
   <h2>Create a Task List</h2>
 
   <form action="{{ url_for('create') }}" method="post">
-    <div class="form-group">
-      <input class="form-control" id="title" type="text" name="title" placeholder="Name the Task List" autocomplete="off" autofocus>
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Name Your List:</span>
+      </div>
+      <input class="form-control" id="title" type="text" name="title" placeholder="Title" autocomplete="off" autofocus>
     </div>
-    <div class="form-group">
-      <input class="form-control" id="task" type="text" name="task" placeholder="Enter a Task Here" autocomplete="off">
+    <div id="tasks">
+      <div class="input-group mb-2">
+        <input class="form-control" id="task0" type="text" name="task" placeholder="Task" autocomplete="off">
+      </div>
     </div>
-    <div class="form-group">
-      <input class="form-control" id="task" type="text" name="task" placeholder="Enter a Task Here" autocomplete="off">
-    </div>
-    <div class="form-group">
-      <input class="form-control" id="task" type="text" name="task" placeholder="Enter a Task Here" autocomplete="off">
-    </div>
-    <div class="form-group">
-      <input class="form-control" id="task" type="text" name="task" placeholder="Enter a Task Here" autocomplete="off">
-    </div>
-    <div class="form-group">
-      <input id="task" type="text" name="task" placeholder="Enter a Task Here" autocomplete="off">
-    </div>
-    <button class="btn btn-primary" type="submit">Create List</button>
+    <button class="btn btn-info" id="add" type="button">Add Task</button>
+    <button class="btn btn-primary" id="create" type="submit">Create List</button>
   </form>
-
 {% endblock %}

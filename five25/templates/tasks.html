@@ -4,27 +4,33 @@
 
 {% block main %}
   <h1>{{ title.title }}</h1>
-  <form action="" method="post">
-    <ul class="list-group checked-list-box">
-      {% for task in focus %}
-        <li class="list-group-item list-group-item-success">
-          <input type="checkbox" name="task" value="{{ task.name }}">{{ task.name }}
-        </li>
-      {% endfor %}
-      {% for task in distractions %}
-        <li class="list-group-item list-group-item-danger">
-          <input type="checkbox" name="task" value="{{ task.name }}">{{ task.name }}
-        </li>
-      {% endfor %}
-      {% for task in completed %}
-        <li class="list-group-item list-group-item-light">
-          <input type="checkbox" name="task" value="{{ task.name }}"><strike>{{ task.name }}</strike>
-        </li>
-      {% endfor %}
-    </ul>
-    <input type="submit" formaction="{{ url_for('focus', list_id=list_id) }}" value="Prioritize">
-    <input type="submit" formaction="{{ url_for('complete', list_id=list_id) }}" value="Mark Completed">
-    <input type="submit" formaction="{{ url_for('delete_task', list_id=list_id) }}" value="Delete">
-    <input type="submit" formaction="{{ url_for('focus', list_id=list_id) }}" value="Delete List">
-  </form>
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <form action="" method="post">
+        <ul class="list-group checked-list-box">
+          {% for task in focus %}
+            <li class="list-group-item list-group-item-success">
+              <input type="checkbox" name="task" value="{{ task.name }}">{{ task.name }}
+            </li>
+          {% endfor %}
+          {% for task in distractions %}
+            <li class="list-group-item list-group-item-danger">
+              <input type="checkbox" name="task" value="{{ task.name }}">{{ task.name }}
+            </li>
+          {% endfor %}
+          {% for task in completed %}
+            <li class="list-group-item list-group-item-light">
+              <input type="checkbox" name="task" value="{{ task.name }}"><strike>{{ task.name }}</strike>
+            </li>
+          {% endfor %}
+        </ul>
+        <button type="submit" class="btn btn-primary btn-lg btn-block" formaction="{{ url_for('focus', list_id=list_id) }}">
+          Prioritize
+        </button>
+        <input type="submit" formaction="{{ url_for('complete', list_id=list_id) }}" value="Mark Completed">
+        <input type="submit" formaction="{{ url_for('delete_task', list_id=list_id) }}" value="Delete">
+        <input type="submit" formaction="{{ url_for('focus', list_id=list_id) }}" value="Delete List">
+      </form>
+    </div>
+  </div>
 {% endblock %}

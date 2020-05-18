@@ -6,20 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootswatch "Spacelab" Theme -->
-    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/spacelab/bootstrap.min.css" rel="stylesheet" integrity="sha384-nl8CRcNYOGaXP68QRJeVTXCWAhwqBhRha0QbuubX1qDQpGT3GgclpvyzkR2JzyfZ" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/spacelab/bootstrap.min.css" rel="stylesheet" integrity="sha384-sIQOcNYer0kt7oTyFe/YrGzKMFP/qxsJbXTxq0/uiZQgpwXwEu41sVz2M61lWbai" crossorigin="anonymous">
 
     <link href="/static/styles.css" rel="stylesheet">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap" rel="stylesheet">
-
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-    <script src="{{ url_for('static', filename='index.js') }}"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
     {% block javascript %}{% endblock %}
 
@@ -28,7 +21,7 @@
 
   <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-primary">
-      <a class="navbar-brand" href="/"><span>Focus</span> Five25</a>
+      <a class="navbar-brand" href="/"><strong>Focus</strong>Five25</a>
       <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbar" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -68,5 +61,8 @@
     <footer class="small text-center text-muted">
     </footer>
 
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
   </body>
 </html>

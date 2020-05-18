@@ -1,5 +1,9 @@
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
 nav .navbar-brand {
-  font-size: xx-large;
+  font-size: x-large;
 }
 
 main .form-control {
@@ -24,6 +28,11 @@ ul {
 .btn.btn-custom {
   border-radius: 0;
   text-align: left;
+}
+
+h4 span {
+  font-size: 1rem;
+  font-weight: bold;
 }
 
 @media all and (max-width:520px) {

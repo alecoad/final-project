@@ -3,8 +3,8 @@
 {% block title %}Add Task{% endblock %}
 
 {% block main %}
-  <h2>Add a Task to <span>{{ list.title }}</span></h2>
-
+  <h4>Add a Task to <strong>{{ list.title }}</strong></h4>
+  <br>
   <div class="row justify-content-center">
     <div class="col-lg-8">
       <form action="{{ url_for('add', list_id=list.id) }}" method="post">

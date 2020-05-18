@@ -36,8 +36,11 @@ def index():
     lists = db.execute(
         'SELECT * FROM lists WHERE user_id = :user_id ORDER BY created DESC', {'user_id': user_id}
     ).fetchall()
+    user = db.execute(
+        'SELECT username FROM users WHERE id = :user_id', {'user_id': user_id}
+    ).fetchone()
 
-    return render_template('index.html', lists=lists)
+    return render_template('index.html', lists=lists, user=user)
 
 
 @app.route('/tasks/<int:list_id>')

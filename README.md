@@ -32,6 +32,6 @@ I also built authentication into the app, using some of what I learned from comp
 
 Overall, I am very happy with the result and I actually made my first real FocusFive25 task list today to help me focus on finishing this README!
 
-## How to install on your local machine
+# How to install on your local machine
 
 Coming soon...

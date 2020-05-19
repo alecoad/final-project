@@ -3,18 +3,42 @@
 {% block title %}About{% endblock %}
 
 {% block main %}
-  <h3>The Inspiration</h3>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-  <h3>How to Use this Site</h3>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-  <h5>Learn More</h5>
-  <p>
-    <a href="https://www.mayooshin.com/buffett-5-25-rule/">How to Focus and Prioritize Your Time Like a Billionaire</a>
-  </p>
-  <p>
-    <a href="https://www.inc.com/justin-bariso/i-just-discovered-warren-buffets-25-5-rule-completely-brilliant.html">
-      I Just Discovered Warren Buffet's 25/5 Rule and It's Completely Brilliant
-    </a>
-  </p>
+  <div class="text-left">
+    <h3 class="font-weight-bold">The Inspiration</h3>
+    <p>The inspiration for this web application came from two places:</p>
+    <ul>
+      <li>A random <a href="">article</a> I read several months ago involving career advice from billionaire Warren Buffet</li>
+      <li>My desire for a more focused approach to learning programming and computer science in general (since my current approach involves drinking from the firehose)</li>
+    </ul>
+    <p>
+      So this app is based off of Warren Buffet’s so called “5-25” rule used to prioritize your career goals.
+      Basically, you write a list of 25 of your career goals, then you go and choose the top 5.
+      The 20 that you don’t choose are now your “anti-goals”—things you want to do but ultimately,
+      are distracting you from your top 5 goals.
+    </p>
+    <h3 class="font-weight-bold">How to Use this Site</h3>
+    <p>
+      When I started this app, my intent was to walk the user through this process,
+      beginning with 25 goals, then selecting 5 and organizing all the goals into a TODO and NOT TODO list.
+      I showed my wife and she was like “25 is a lot. Does it need to be that many?”
+      Her insight helped me broaden my scope to turn the app into a glorified task list with a similar premise.
+      Say you have 10 tasks you want to complete today.
+      Choose 2 and the other 8 become your “anti-tasks” — avoid them until you finish your two tasks you chose to focus on!
+      Also, if you want you can still create 25 goals and choose the top five.
+      I created the app so you can store all your lists and update, delete, or reference them very easily.
+      Career goals, weekly goals, summer goals, afternoon tasks, whatever you want.
+    </p>
+    <p>Feel free to use it, abuse it, make it your own, and above all else, I hope it can help you focus on the goals you truly want to accomplish.</p>
+    <p>Enjoy!</p>
+
+    <h5 class="font-weight-bold">Learn More</h5>
+    <p>
+      <a href="https://www.mayooshin.com/buffett-5-25-rule/">How to Focus and Prioritize Your Time Like a Billionaire</a>
+    </p>
+    <p>
+      <a href="https://www.inc.com/justin-bariso/i-just-discovered-warren-buffets-25-5-rule-completely-brilliant.html">
+        I Just Discovered Warren Buffet's 25/5 Rule and It's Completely Brilliant
+      </a>
+    </p>
+  </div>
 {% endblock %}

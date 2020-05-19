@@ -1,5 +1,5 @@
-## Final Project for CS50x - FocusFive25
-# by Andrew Coad
+# Final Project for CS50x - FocusFive25
+## by Andrew Coad
 
 This is a task list application using Flask and a touch of JavaScript. Much of the structure was adapted from the CS50 Finance project seen here: https://finance.cs50.net
 
@@ -32,6 +32,6 @@ I also built authentication into the app, using some of what I learned from comp
 
 Overall, I am very happy with the result and I actually made my first real FocusFive25 task list today to help me focus on finishing this README!
 
-# How to install on your local machine
+## How to install on your local machine
 
 Coming soon...

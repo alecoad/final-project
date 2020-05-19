@@ -20,6 +20,21 @@ main img {
   max-width: 100%;
 }
 
+ol li {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-left: 1rem;
+}
+
+.about-list {
+  padding-left: 2.5rem;
+}
+
+.about-list li {
+  padding-left: 1rem;
+  margin-bottom: 1rem;
+}
+
 ul {
   padding-left: 0;
   padding-bottom: 0.5rem;

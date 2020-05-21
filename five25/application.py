@@ -282,3 +282,9 @@ def logout():
 
     session.clear()
     return redirect('/')
+
+
+# Deployment help from https://stackabuse.com/deploying-a-flask-application-to-heroku/
+if __name__ == '__main__':
+    # Threaded option to enable multiple instances for multiple user access support
+    app.run(threaded=True, port=5000)
